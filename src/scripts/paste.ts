@@ -55,8 +55,10 @@ export function pasteKeyboardListener(event: ClipboardEvent) {
   parseDataTransferItemList(clipboardItems);
 }
 
-interface DataTransferItemList {
-  [Symbol.iterator](): { next(): { value: DataTransferItem } };
+declare global {
+  interface DataTransferItemList {
+    [Symbol.iterator](): { next(): { value: DataTransferItem } };
+  }
 }
 
 function parseDataTransferItemList(clipboardItems: DataTransferItemList) {
