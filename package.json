@@ -1,41 +1,17 @@
 {
   "private": true,
   "scripts": {
-    "build": "vite-ssg build",
-    "dev": "vite --port 3333 --open",
-    "lint": "oxlint .",
-    "preview": "vite preview",
-    "preview-https": "serve dist",
-    "typecheck": "vue-tsc --noEmit"
-  },
-  "dependencies": {
-    "@vueuse/core": "^14.2.1",
-    "@vueuse/head": "^2.0.0",
-    "nprogress": "^0.2.0",
-    "pinia": "^3.0.4",
-    "prism-theme-vars": "^0.2.2",
-    "vue": "^3.2.31",
-    "vue-demi": "^0.14.10",
-    "vue-router": "^5.0.2"
+    "lint": "biome lint",
+    "format": "biome check --write --linter-enabled=false",
+    "build": "astro build",
+    "dev": "astro dev",
+    "typecheck": "astro --check"
   },
   "devDependencies": {
-    "@iconify-json/carbon": "^1.1.3",
-    "@types/nprogress": "^0.2.0",
-    "@vitejs/plugin-vue": "^6.0.4",
+    "@biomejs/biome": "2.4.2",
+    "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.2",
-    "critters": "^0.0.25",
-    "cross-env": "^10.1.0",
-    "oxlint": "^1.48.0",
-    "typescript": "^5.9.3",
-    "unocss": "^66.6.0",
-    "unplugin-auto-import": "^21.0.0",
-    "unplugin-vue-components": "^31.0.0",
-    "vite": "^7.3.1",
-    "vite-plugin-inspect": "^11.3.3",
-    "vite-plugin-pages": "^0.33.3",
-    "vite-plugin-vue-layouts": "^0.11.0",
-    "vite-ssg": "^28.3.0",
-    "vite-ssg-sitemap": "^0.10.0",
-    "vue-tsc": "^3.2.4"
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3"
   }
 }

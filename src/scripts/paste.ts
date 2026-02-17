@@ -1,95 +1,94 @@
-'use strict'
-
 export async function pasteClickListener(event: Event) {
-  event.preventDefault()
-  event.stopPropagation()
+  event.preventDefault();
+  event.stopPropagation();
 
   if (!navigator?.clipboard?.read) {
-    console.info('Clipboard read is not supported.')
-    return
+    console.info("Clipboard read is not supported.");
+    return;
   }
 
-  const clipboardItems = await navigator.clipboard.read()
+  const clipboardItems = await navigator.clipboard.read();
 
   if (!clipboardItems) {
-    console.info('There is no clipboard data')
-    return
+    console.info("There is no clipboard data");
+    return;
   }
 
-  await parseClipboardItems(clipboardItems)
+  await parseClipboardItems(clipboardItems);
 }
 
 async function parseClipboardItems(clipboardItems: ClipboardItem[]) {
   for (const clipboardItem of clipboardItems) {
-    //
     for (const itemType of clipboardItem.types) {
-      //
-      let parsedItem: Blob
+      let parsedItem: Blob;
 
-      const itemGenericType = itemType.split('/')[0]
+      const itemGenericType = itemType.split("/")[0];
 
       switch (itemGenericType) {
-        case 'image':
-          parsedItem = await clipboardItem.getType(itemType)
-          break
+        case "image":
+          parsedItem = await clipboardItem.getType(itemType);
+          break;
 
         default:
-          console.warn('Unknown clipboard item type: ', itemType)
-          continue
+          console.warn("Unknown clipboard item type: ", itemType);
+          continue;
       }
 
-      downloadBlob(parsedItem)
+      downloadBlob(parsedItem);
     }
   }
 }
 
 export function pasteKeyboardListener(event: ClipboardEvent) {
-  event.preventDefault()
-  event.stopPropagation()
+  event.preventDefault();
+  event.stopPropagation();
 
-  const clipboardData = event.clipboardData
+  const clipboardData = event.clipboardData;
 
   if (!clipboardData) {
-    console.info('There is no clipboard data')
-    return
+    console.info("There is no clipboard data");
+    return;
   }
 
-  const clipboardItems = clipboardData.items
+  const clipboardItems = clipboardData.items;
 
-  parseDataTransferItemList(clipboardItems)
+  parseDataTransferItemList(clipboardItems);
+}
+
+interface DataTransferItemList {
+  [Symbol.iterator](): { next(): { value: DataTransferItem } };
 }
 
 function parseDataTransferItemList(clipboardItems: DataTransferItemList) {
-  // @ts-expect-error it already has a type
-  for (const item: DataTransferItem of clipboardItems) {
-    //
-    let parsedItem: File
+  for (const item of clipboardItems) {
+    let parsedItem: File;
 
-    const itemGenericType = item.type.split('/')[0]
+    const itemGenericType = item.type.split("/")[0];
 
     switch (itemGenericType) {
-      case 'image':
-        parsedItem = item.getAsFile()
-        break
-
-      default:
-        console.warn('Unknown clipboard item type: ', item.type)
-        continue
+      case "image": {
+        parsedItem = item.getAsFile();
+        break;
+      }
+      default: {
+        console.warn("Unknown clipboard item type: ", item.type);
+        continue;
+      }
     }
 
-    downloadBlob(parsedItem, parsedItem.name)
+    downloadBlob(parsedItem, parsedItem.name);
   }
 }
 
-export function downloadBlob(blob: Blob, fileName = 'image') {
-  const url = URL.createObjectURL(blob)
+export function downloadBlob(blob: Blob, fileName = "image") {
+  const url = URL.createObjectURL(blob);
 
-  const link = document.createElement('a')
-  link.href = url
-  link.download = fileName
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName;
 
-  link.click()
-  link.remove()
+  link.click();
+  link.remove();
 
-  URL.revokeObjectURL(url)
+  URL.revokeObjectURL(url);
 }
